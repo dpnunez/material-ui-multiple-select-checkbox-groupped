@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/material-ui-multiple-select-checkbox-groupped/static/css/main.bfe5c144.chunk.css",
-    "main.js": "/material-ui-multiple-select-checkbox-groupped/static/js/main.9f4fe948.chunk.js",
-    "main.js.map": "/material-ui-multiple-select-checkbox-groupped/static/js/main.9f4fe948.chunk.js.map",
+    "main.js": "/material-ui-multiple-select-checkbox-groupped/static/js/main.382e84ea.chunk.js",
+    "main.js.map": "/material-ui-multiple-select-checkbox-groupped/static/js/main.382e84ea.chunk.js.map",
     "runtime-main.js": "/material-ui-multiple-select-checkbox-groupped/static/js/runtime-main.e576ed31.js",
     "runtime-main.js.map": "/material-ui-multiple-select-checkbox-groupped/static/js/runtime-main.e576ed31.js.map",
-    "static/js/2.a7224da2.chunk.js": "/material-ui-multiple-select-checkbox-groupped/static/js/2.a7224da2.chunk.js",
-    "static/js/2.a7224da2.chunk.js.map": "/material-ui-multiple-select-checkbox-groupped/static/js/2.a7224da2.chunk.js.map",
+    "static/js/2.e442b9bc.chunk.js": "/material-ui-multiple-select-checkbox-groupped/static/js/2.e442b9bc.chunk.js",
+    "static/js/2.e442b9bc.chunk.js.map": "/material-ui-multiple-select-checkbox-groupped/static/js/2.e442b9bc.chunk.js.map",
     "static/js/3.d4e3bb7f.chunk.js": "/material-ui-multiple-select-checkbox-groupped/static/js/3.d4e3bb7f.chunk.js",
     "static/js/3.d4e3bb7f.chunk.js.map": "/material-ui-multiple-select-checkbox-groupped/static/js/3.d4e3bb7f.chunk.js.map",
     "index.html": "/material-ui-multiple-select-checkbox-groupped/index.html",
     "static/css/main.bfe5c144.chunk.css.map": "/material-ui-multiple-select-checkbox-groupped/static/css/main.bfe5c144.chunk.css.map",
-    "static/js/2.a7224da2.chunk.js.LICENSE.txt": "/material-ui-multiple-select-checkbox-groupped/static/js/2.a7224da2.chunk.js.LICENSE.txt"
+    "static/js/2.e442b9bc.chunk.js.LICENSE.txt": "/material-ui-multiple-select-checkbox-groupped/static/js/2.e442b9bc.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.e576ed31.js",
-    "static/js/2.a7224da2.chunk.js",
+    "static/js/2.e442b9bc.chunk.js",
     "static/css/main.bfe5c144.chunk.css",
-    "static/js/main.9f4fe948.chunk.js"
+    "static/js/main.382e84ea.chunk.js"
   ]
 }
