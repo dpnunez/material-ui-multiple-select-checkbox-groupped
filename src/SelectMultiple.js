@@ -1,22 +1,51 @@
 import { FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText } from '@material-ui/core'
+import { useMemo } from 'react'
+import { useCallback } from 'react'
 import { forwardRef } from 'react'
 
 
-const SelectCustom = ({options, label, onChange, value = [], teste}) => {
+const MenuProps = {
+	anchorOrigin: {
+		vertical: "bottom",
+		horizontal: "left"
+	},
+	transformOrigin: {
+		vertical: "top",
+		horizontal: "left"
+	},
+	getContentAnchorEl: null
+}
 
-	const onChangeCleaner = (event) => {
+const SelectCustom = ({options, label, onChange, value = []}) => {
+
+
+	// ===============================
+	// Formaters
+	// ===============================
+	const formatedOptions = useMemo(() => options.reduce((acc, item) => {
+		if (item.value) {
+			return [...acc, {...item, style: { paddingLeft: 0}}]
+		}
+		return [...acc, { label: item.label, type: 'section' }, ...item.itens]
+	}, []), [options])
+
+	const allValues = useMemo(() => {
+		return formatedOptions.filter(option => option.type !== 'section').map(option => option.value)
+	}, [formatedOptions])
+
+	// ===============================
+	// Handlers
+	// ===============================
+	// onChangeCleaned tem o objetivo de ignorar os onChanges gerados diretamente pelo MenuItem que sao seçoes
+	const onChangeCleaned = useCallback((event) => {
 		if (!event.target || event.target.value.includes(undefined)) {
 			return console.log("nao executa")
 		} else {
 			onChange(event)
 		}
-	}
+	}, [onChange])
 
-	const formatedOptions = options.reduce((acc, item) => {
-		return [...acc, { label: item.label, type: 'section' }, ...item.itens]
-	}, [])
-
-	const handleSection = (id, action) => {
+	const handleSection = useCallback((id, action) => {
 		const sectionTarget = options.find(section => section['label'] === id)
 		const itemsTarget = sectionTarget.itens
 		const itemsTargetValues = itemsTarget.map(item => item['value'])
@@ -24,23 +53,34 @@ const SelectCustom = ({options, label, onChange, value = [], teste}) => {
 		if (action) {
 			const newValue = [...value, ...itemsTargetValues]
 			const filteredValue = newValue.filter((current, index) => newValue.indexOf(current) === index);
-			return onChangeCleaner({target: { value: filteredValue }})
+			return onChangeCleaned({target: { value: filteredValue }})
 		}
 
 		const newValue = value.filter(item => !itemsTargetValues.includes(item))
 		console.log(newValue)
-		onChangeCleaner({target: { value: newValue }})
+		onChangeCleaned({target: { value: newValue }})
 
-	}
+	}, [onChangeCleaned, options, value])
 
-	const watchSectionStatus = (id, itens) => {
+	const handleAllOptions = useCallback((newValue) => {
+		onChangeCleaned({ target: { value: newValue } })
+	}, [onChangeCleaned])
+
+	// ================================
+	// Helpers
+	// ================================
+	const watchSectionStatus = useCallback((id, itens) => {
 		const sectionTarget = options.find(section => section['label'] === id)
 		const itemsTarget = sectionTarget.itens
 
 		const itemsTargetValues = itemsTarget.map(item => item['value'])
 
 		return itemsTargetValues.every(itemValue => value.includes(itemValue))
-	}
+	}, [options, value])
+
+	const watchAllStatus = useMemo(() => {
+		return allValues.every(option => value.includes(option))
+	}, [value, allValues])
 
 	return (
 			<FormControl variant="outlined" style={{width: '500px'}}>
@@ -50,10 +90,12 @@ const SelectCustom = ({options, label, onChange, value = [], teste}) => {
           multiple
 					label={label}
           value={value}
-          onChange={onChangeCleaner}
+          onChange={onChangeCleaned}
 					// Podemos utilizar o objeto inteiro como value, logo nao precisamos iterar para achar o label atraves do value
           renderValue={(selected) => selected.filter(Boolean).map(value => formatedOptions.find(op => op.value === value).label).join(', ')}
-        >
+					MenuProps={MenuProps}
+				>
+					<SectionMenu checked={watchAllStatus} textColor="secondary" onClick={() => handleAllOptions(watchAllStatus ? [] : allValues)} label="Selecionar tudo" />
 					{formatedOptions.map(item => {
 						if(item.type === 'section') {
 							return <SectionMenu checked={watchSectionStatus(item.label, item)} onClick={() => handleSection(item.label, !watchSectionStatus(item.label, item))} key={item.label} label={item.label} />
@@ -64,6 +106,7 @@ const SelectCustom = ({options, label, onChange, value = [], teste}) => {
 								key={item.label}
 								label={item.label}
 								value={item.value}
+								style={item.style}
 								checked={value.findIndex(itemValue => itemValue === item.value) > -1}
 							/>
 						)
@@ -74,21 +117,19 @@ const SelectCustom = ({options, label, onChange, value = [], teste}) => {
 	)
 }
 
-const SectionMenu = forwardRef(({key, label, onClick, checked}, ref) => {
+const SectionMenu = forwardRef(({key, label, onClick, checked, textColor}, ref) => {
 
 	return (
 			<MenuItem onClick={onClick} style={{ paddingLeft: 0, display: 'flex' }} key={key}>
 				<Checkbox checked={checked} />
-				<ListItemText primary={label} />
+				<ListItemText color="primary" primary={label} />
 			</MenuItem>
 	)
 })
 
-const ItemMenu = forwardRef(({value, label, checked, ...rest}, ref) => {
-
-
+const ItemMenu = forwardRef(({value, label, checked, style = {}, ...rest}, ref) => {
 	return (
-		<MenuItem key={label} value={label} ref={ref} {...rest}>
+		<MenuItem key={label} value={label} ref={ref} style={style} {...rest}>
 			<Checkbox checked={checked} />
 			<ListItemText primary={label} />
 		</MenuItem>

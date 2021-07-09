@@ -5,6 +5,10 @@ import './App.css';
 
 const options = [
 	{
+		label: 'Sem section',
+		value: 123
+	},
+	{
 		label: 'Capitulos',
 		id: 918,
 		itens: [
@@ -40,7 +44,6 @@ function App() {
     <div className="App">
       <header className="App-header">
 				<SelectMultiple
-					teste={setValue}
 					onChange={(e) => setValue(e.target.value)}
 					value={value}
 					options={options}
