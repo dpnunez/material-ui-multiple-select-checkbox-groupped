@@ -17,8 +17,22 @@ const options = [
 				value: 12
 			},
 			{
-				label: 'Capitulo 2',
+				label: 'Capitulo 24345',
 				value: 49
+			},
+			{
+				label: 'Capitulo 223',
+				value: 1293939
+			},
+			{
+				label: 'Capitulo 1232',
+				value: 423
+			},{
+				label: 'Capitulo 4352',
+				value: 76587
+			},{
+				label: 'Capitulo 123412',
+				value: 213
 			}
 		]
 	},

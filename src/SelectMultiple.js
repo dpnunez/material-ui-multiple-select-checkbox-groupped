@@ -1,7 +1,9 @@
-import { FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText } from '@material-ui/core'
+import { FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, Typography, Box } from '@material-ui/core'
 import { useMemo } from 'react'
 import { useCallback } from 'react'
 import { forwardRef } from 'react'
+import styled from 'styled-components'
+import { typography } from '@material-ui/system';
 
 
 const MenuProps = {
@@ -17,8 +19,6 @@ const MenuProps = {
 }
 
 const SelectCustom = ({options, label, onChange, value = []}) => {
-
-
 	// ===============================
 	// Formaters
 	// ===============================
@@ -26,7 +26,7 @@ const SelectCustom = ({options, label, onChange, value = []}) => {
 		if (item.value) {
 			return [...acc, {...item, style: { paddingLeft: 0}}]
 		}
-		return [...acc, { label: item.label, type: 'section' }, ...item.itens]
+		return [...acc, { label: item.label, type: 'section' }, ...item.itens.map(e => ({...e, style: { paddingLeft: 30 }}))]
 	}, []), [options])
 
 	const allValues = useMemo(() => {
@@ -38,9 +38,7 @@ const SelectCustom = ({options, label, onChange, value = []}) => {
 	// ===============================
 	// onChangeCleaned tem o objetivo de ignorar os onChanges gerados diretamente pelo MenuItem que sao seçoes
 	const onChangeCleaned = useCallback((event) => {
-		if (!event.target || event.target.value.includes(undefined)) {
-			return console.log("nao executa")
-		} else {
+		if (event.target && !event.target.value.includes(undefined)) {
 			onChange(event)
 		}
 	}, [onChange])
@@ -57,7 +55,6 @@ const SelectCustom = ({options, label, onChange, value = []}) => {
 		}
 
 		const newValue = value.filter(item => !itemsTargetValues.includes(item))
-		console.log(newValue)
 		onChangeCleaned({target: { value: newValue }})
 
 	}, [onChangeCleaned, options, value])
@@ -91,11 +88,10 @@ const SelectCustom = ({options, label, onChange, value = []}) => {
 					label={label}
           value={value}
           onChange={onChangeCleaned}
-					// Podemos utilizar o objeto inteiro como value, logo nao precisamos iterar para achar o label atraves do value
           renderValue={(selected) => selected.filter(Boolean).map(value => formatedOptions.find(op => op.value === value).label).join(', ')}
 					MenuProps={MenuProps}
 				>
-					<SectionMenu checked={watchAllStatus} textColor="secondary" onClick={() => handleAllOptions(watchAllStatus ? [] : allValues)} label="Selecionar tudo" />
+					<SectionMenu checked={watchAllStatus} style={{padding: 0}} color="secondary" fontWeight="bold" onClick={() => handleAllOptions(watchAllStatus ? [] : allValues)} label="Selecionar tudo" />
 					{formatedOptions.map(item => {
 						if(item.type === 'section') {
 							return <SectionMenu checked={watchSectionStatus(item.label, item)} onClick={() => handleSection(item.label, !watchSectionStatus(item.label, item))} key={item.label} label={item.label} />
@@ -117,24 +113,27 @@ const SelectCustom = ({options, label, onChange, value = []}) => {
 	)
 }
 
-const SectionMenu = forwardRef(({key, label, onClick, checked, textColor}, ref) => {
-
+const SectionMenu = forwardRef(({key, label, onClick, checked, color, fontWeight, style = { paddingLeft: 0}}, ref) => {
 	return (
-			<MenuItem onClick={onClick} style={{ paddingLeft: 0, display: 'flex' }} key={key}>
-				<Checkbox checked={checked} />
-				<ListItemText color="primary" primary={label} />
+			<MenuItem onClick={onClick} style={style} key={key}>
+				<Checkbox color={color} checked={checked} />
+				<Text color={color} fontWeight={fontWeight}>{label}</Text>
 			</MenuItem>
 	)
 })
 
-const ItemMenu = forwardRef(({value, label, checked, style = {}, ...rest}, ref) => {
+const ItemMenu = forwardRef(({value, label, checked, style = {}, color, ...rest}, ref) => {
 	return (
 		<MenuItem key={label} value={label} ref={ref} style={style} {...rest}>
 			<Checkbox checked={checked} />
-			<ListItemText primary={label} />
+			<Text color={color}>{label}</Text>
 		</MenuItem>
 	)
 })
+
+const Text = styled(Typography)`
+	${typography}
+`
 
 export default SelectCustom
 
